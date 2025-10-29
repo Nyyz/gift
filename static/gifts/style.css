@@ -1,0 +1,24 @@
+body{font-family:Inter, Arial, sans-serif;margin:0;background:#f7f7fb;color:#111}
+.card-img-top{object-fit:cover;height:180px}
+.card{border-radius:12px}
+.card .btn{border-radius:8px}
+.avatar{width:96px;height:96px;border-radius:50%;object-fit:cover}
+.post img{display:block;width:100%;height:auto;max-height:640px;object-fit:cover}
+.post .card-header{background:transparent;border-bottom:0}
+.post .card-body{padding-top:8px}
+.rounded-circle.bg-gradient{background:linear-gradient(45deg,#ff7a18,#af002d)}
+.likes-count{font-weight:600}
+.btn-link{color:inherit;text-decoration:none}
+.btn-link:hover{color:#d63349}
+.story{width:72px}
+.card{border-radius:14px}
+.card p{line-height:1.4}
+.form-control{border-radius:8px}
+.navbar .btn{padding:0.2rem 0.6rem}
+
+/* Category chips */
+#categories-bar{padding-bottom:4px}
+.category-chip{background:linear-gradient(180deg,#fff,#fbfcff);border:1px solid #eef2ff;transition:transform .12s ease,box-shadow .12s ease}
+.category-chip:hover{transform:translateY(-4px);box-shadow:0 6px 18px rgba(20,30,80,.08)}
+.category-icon{width:44px;height:44px;font-size:18px}
+.fw-medium{font-weight:600}

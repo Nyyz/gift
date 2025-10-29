@@ -1,0 +1,47 @@
+{% extends 'gifts/base.html' %}
+
+{% block title %}Повідомлення{% endblock %}
+
+{% block content %}
+  <div class="chat-wrapper">
+    <div class="chat-list">
+      <div class="p-3 d-flex justify-content-between align-items-center">
+        <strong>Повідомлення</strong>
+        <a class="btn btn-sm btn-outline-primary" href="{% url 'chat:new' %}">Нова</a>
+      </div>
+      {% if conversations %}
+        {% for item in conversations %}
+          {% with c=item.conv other=item.other %}
+          <a class="conv" href="{% url 'chat:conversation' c.id %}">
+            <div class="avatar">
+              {% if other and other.profile.avatar %}
+                <img src="{{ other.profile.avatar.url }}" width="48" height="48">
+              {% endif %}
+            </div>
+            <div class="meta">
+              <div class="who">{% if other %}{{ other.profile.display_name|default:other.username }}{% else %}Розмова {{ c.id }}{% endif %}</div>
+              <div class="last">Останнє: {{ c.created_at|date:'j M Y, H:i' }}</div>
+            </div>
+          </a>
+          {% endwith %}
+        {% endfor %}
+      {% else %}
+        <div class="p-3 text-muted">Немає розмов. Створіть нову.</div>
+      {% endif %}
+    </div>
+    <div class="chat-main">
+      <div class="chat-header">
+        <div><strong>Виберіть розмову</strong></div>
+      </div>
+      <div class="chat-messages" id="messages">
+        <div class="text-muted p-3">Оберіть розмову ліворуч або створіть нову.</div>
+      </div>
+      <div class="chat-input">
+        <div class="input-group">
+          <input class="form-control" placeholder="Напишіть повідомлення..." disabled>
+          <button class="btn btn-primary" disabled>Відправити</button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

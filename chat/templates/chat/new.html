@@ -1,0 +1,42 @@
+{% extends 'gifts/base.html' %}
+
+{% block title %}Нова розмова{% endblock %}
+
+{% block content %}
+  <div class="card p-3">
+    <h4 class="mb-3">Нова розмова</h4>
+    <form method="get" class="mb-3">
+      <div class="input-group">
+        <input name="q" class="form-control" placeholder="Шукати користувача..." value="{{ request.GET.q }}">
+        <button class="btn btn-outline-secondary">Пошук</button>
+      </div>
+    </form>
+
+    {% if results %}
+      <div class="list-group">
+        {% for u in results %}
+          <div class="list-group-item d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center">
+              <div class="rounded-circle bg-secondary me-2" style="width:40px;height:40px;overflow:hidden">
+                {% if u.profile.avatar %}
+                  <img src="{{ u.profile.avatar.url }}" width="40" height="40">
+                {% endif %}
+              </div>
+              <div>
+                <div class="fw-bold">{{ u.username }}</div>
+                <div class="text-muted small">Користувач</div>
+              </div>
+            </div>
+            <form method="post">
+              {% csrf_token %}
+              <input type="hidden" name="user_id" value="{{ u.id }}">
+              <button class="btn btn-primary">Почати</button>
+            </form>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="text-muted">Нічого не знайдено</div>
+    {% endif %}
+  </div>
+{% endblock %}

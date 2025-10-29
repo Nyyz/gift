@@ -1,0 +1,90 @@
+{% extends 'gifts/base.html' %}
+
+{% block title %}{{ gift.title }} — GiftMate{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-md-8">
+      <div class="card mb-3">
+        {% if gift.image %}
+          <img src="{{ gift.image.url }}" class="card-img-top" alt="{{ gift.title }}">
+        {% endif %}
+        <div class="card-body">
+          <h3>{{ gift.title }}</h3>
+          <p class="text-muted">Категорія: {{ gift.category }}</p>
+          <p>{{ gift.description }}</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+          <h5>Коментарі</h5>
+          <div id="comments">
+            {% for comment in gift.comments.all %}
+              <div class="mb-2"><strong>{{ comment.user.username }}</strong>: {{ comment.text }}</div>
+            {% empty %}
+              <p>Ще немає коментарів.</p>
+            {% endfor %}
+          </div>
+          {% if user.is_authenticated %}
+            <form id="comment-form">
+              <div class="mb-2"><textarea name="text" class="form-control" rows="2" placeholder="Написати коментар..."></textarea></div>
+              <button class="btn btn-primary">Відправити</button>
+            </form>
+          {% else %}
+            <p><a href="{% url 'login' %}">Увійдіть щоб коментувати</a></p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card p-3">
+        <p>Лайки: <span id="likes-count">{{ gift.likes.count }}</span></p>
+        {% if user.is_authenticated %}
+          <button class="btn btn-outline-danger like-btn" data-id="{{ gift.id }}">❤</button>
+          <button class="btn btn-outline-secondary save-btn" data-id="{{ gift.id }}">💾 Зберегти</button>
+          <hr>
+          <div>
+            <button id="share-btn" class="btn btn-outline-primary">Поділитися</button>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Open a simple native prompt to choose conversation id for sharing.
+document.getElementById('share-btn')?.addEventListener('click', async function(){
+  // build a list of user's conversations as a simple prompt. For better UX replace with modal.
+  const convs = JSON.parse(document.getElementById('convs-json').textContent || '[]');
+  if(convs.length === 0) return alert('Немає розмов для надсилання');
+  const labels = convs.map(c=>`${c.id}: ${c.label}`).join('\n');
+  const pick = prompt('Виберіть розмову по id:\n'+labels);
+  if(!pick) return;
+  const convId = parseInt(pick.trim());
+  if(!convs.some(c=>c.id===convId)) return alert('Невірний id розмови');
+  const form = new FormData();
+  form.append('text','Поділився подарунком: {{ gift.title }}');
+  form.append('forwarded_gift_id','{{ gift.id }}');
+  const res = await fetch(`/chat/conversation/${convId}/send/`,{method:'POST', body: form, headers:{'X-CSRFToken': getCookie('csrftoken')}});
+  if(res.ok){
+    alert('Подарунок відправлено');
+  } else {
+    alert('Помилка при відправці');
+  }
+});
+
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+}
+</script>
+<script id="convs-json" type="application/json">[
+{% for conv in user_conversations %}
+  {"id": {{ conv.id }}, "label": "{{ conv.label|escapejs }}" }{% if not forloop.last %},{% endif %}
+{% endfor %}
+]</script>
+{% endblock %}

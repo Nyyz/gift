@@ -1,0 +1,35 @@
+{% extends 'gifts/base.html' %}
+
+{% block title %}Вибрати збережений подарунок{% endblock %}
+
+{% block content %}
+  <div class="card p-3">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <div>
+        <h5 class="mb-0">Оберіть подарунок</h5>
+        <div class="text-muted small">Надіслати в розмову {{ conversation.id }}</div>
+      </div>
+      <div><a href="{% url 'chat:conversation' conversation.id %}" class="btn btn-sm btn-outline-secondary">Повернутись</a></div>
+    </div>
+    <div class="row gy-3">
+      {% if saved_gifts %}
+        {% for g in saved_gifts %}
+          <div class="col-md-4 mb-3">
+            <div class="card p-2">
+              {% if g.image %}<img src="{{ g.image }}" class="img-fluid mb-2"/>{% endif %}
+              <div class="fw-bold">{{ g.title }}</div>
+              <form method="post" class="mt-2">
+                {% csrf_token %}
+                <input type="hidden" name="gift_id" value="{{ g.id }}"/>
+                <button class="btn btn-primary">Надіслати цей подарунок</button>
+              </form>
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <div class="col-12 text-muted">Ви ще не зберегли подарунків.</div>
+      {% endif %}
+    </div>
+    <div class="mt-3"><a href="{% url 'chat:conversation' conversation.id %}">Повернутись назад</a></div>
+  </div>
+{% endblock %}

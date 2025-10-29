@@ -1,0 +1,21 @@
+/* Messenger-like styles */
+.chat-wrapper{display:flex;gap:1rem}
+.chat-list{width:280px;background:#fff;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.08);overflow:hidden}
+.chat-list .conv{padding:12px;border-bottom:1px solid #f1f1f1;display:flex;gap:10px;align-items:center;text-decoration:none;color:inherit}
+.chat-list .conv:hover{background:#f8f9fb}
+.chat-list .avatar{width:48px;height:48px;border-radius:50%;background:#ddd;overflow:hidden;flex:0 0 48px}
+.chat-list .meta{flex:1}
+.chat-list .meta .who{font-weight:600}
+.chat-list .meta .last{font-size:.9rem;color:#6c757d}
+.chat-main{flex:1;display:flex;flex-direction:column;background:#fff;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.08);overflow:hidden}
+.chat-header{padding:12px;border-bottom:1px solid #f1f1f1;display:flex;align-items:center;gap:12px}
+.chat-messages{padding:16px;flex:1;overflow:auto;background:linear-gradient(#fff,#fafbff)}
+ .forwarded-gift{background:rgba(255,255,255,0.06);padding:8px;border-radius:8px}
+.msg{max-width:70%;margin-bottom:8px;padding:10px 12px;border-radius:14px;box-shadow:0 1px 1px rgba(0,0,0,.03)}
+.msg.me{margin-left:auto;background:#0d6efd;color:#fff;border-bottom-right-radius:4px}
+.msg.them{margin-right:auto;background:#f1f3f5;color:#000;border-bottom-left-radius:4px}
+.chat-input{padding:12px;border-top:1px solid #f1f1f1}
+.chat-input .input-group{gap:8px}
+@media (max-width: 991px){
+  .chat-list{display:none}
+}

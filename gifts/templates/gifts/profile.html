@@ -1,0 +1,38 @@
+{% extends 'gifts/base.html' %}
+
+{% block title %}Профіль — GiftMate{% endblock %}
+
+{% block content %}
+  <div class="card mb-3 p-3">
+    <div class="d-flex align-items-center">
+      {% if profile and profile.avatar %}
+        <img class="avatar me-3" src="{{ profile.avatar.url }}" alt="avatar">
+      {% else %}
+        <div class="avatar bg-secondary me-3"></div>
+      {% endif %}
+      <div>
+        <h2 class="mb-0">{{ profile.display_name|default:user.username }}</h2>
+        <div class="text-muted small">@{{ user.username }}</div>
+        <p class="mt-2"><a href="{% url 'gifts:edit_profile' %}" class="btn btn-sm btn-outline-primary">Редагувати профіль</a></p>
+      </div>
+    </div>
+  </div>
+
+  <h4 class="mb-3">Збережені подарунки</h4>
+  <div class="row g-3">
+    {% for item in saved %}
+      <div class="col-6 col-md-4">
+        <div class="card h-100">
+          {% if item.gift.image %}
+            <img src="{{ item.gift.image.url }}" class="card-img-top" style="height:160px;object-fit:cover" />
+          {% endif %}
+          <div class="card-body p-2">
+            <div class="small fw-bold">{{ item.gift.title }}</div>
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <p>Ще нічого не збережено.</p>
+    {% endfor %}
+  </div>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'gifts/base.html' %}
+
+{% block content %}
+  <div class="d-flex justify-content-center">
+    <div class="card p-4" style="max-width:420px;width:100%">
+      <h3 class="mb-3">Увійти</h3>
+      <form method="post">{% csrf_token %}
+        <div class="mb-2">{{ form.username.label_tag }} {{ form.username }}</div>
+        <div class="mb-3">{{ form.password.label_tag }} {{ form.password }}</div>
+        <div class="d-grid"><button class="btn btn-primary">Увійти</button></div>
+      </form>
+      <div class="text-center small mt-3">Немає акаунта? <a href="{% url 'register' %}">Зареєструватись</a></div>
+    </div>
+  </div>
+{% endblock %}

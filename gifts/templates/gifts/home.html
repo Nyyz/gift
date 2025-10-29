@@ -1,0 +1,54 @@
+{% extends 'gifts/base.html' %}
+
+{% block title %}Головна — GiftMate{% endblock %}
+
+{% block content %}
+  <!-- Stories bar -->
+  <div class="mb-4">
+    <div class="d-flex gap-3 overflow-auto py-2 align-items-center" id="categories-bar">
+      {% for p in categories|slice:":12" %}
+        <a href="?category={{ p.id }}" class="category-chip d-flex align-items-center text-decoration-none p-2 px-3 rounded shadow-sm">
+          <div class="me-2 category-icon bg-white rounded-circle d-flex align-items-center justify-content-center">🎁</div>
+          <div class="small fw-medium text-dark">{{ p.name }}</div>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Feed -->
+  <div id="feed">
+    {% for gift in gifts %}
+      <div class="card mb-4 post" data-id="{{ gift.id }}">
+        <div class="card-header d-flex align-items-center">
+          {% if gift.category %}
+            <div class="me-2 rounded-circle bg-secondary" style="width:40px;height:40px"></div>
+          {% endif %}
+          <div>
+            <div class="fw-bold">{{ gift.title }}</div>
+            <div class="small text-muted">{{ gift.category }}</div>
+          </div>
+        </div>
+        {% if gift.image %}
+          <img src="{{ gift.image.url }}" class="w-100" style="object-fit:cover;max-height:600px;" alt="{{ gift.title }}">
+        {% endif %}
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <div>
+              <button class="btn btn-link text-danger like-btn" data-id="{{ gift.id }}">❤ <span class="likes-count">{{ gift.likes.count }}</span></button>
+              <button class="btn btn-link save-btn" data-id="{{ gift.id }}">💾</button>
+            </div>
+            <div class="text-muted small">{{ gift.created_at|date:"j M Y" }}</div>
+          </div>
+          <p>{{ gift.description }}</p>
+          <a href="{% url 'gifts:gift_detail' gift.id %}" class="text-decoration-none">Переглянути коментарі</a>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  {% if gifts.has_next %}
+    <div class="text-center my-3" id="load-more-wrap">
+      <button id="load-more" class="btn btn-outline-primary" data-next="{{ gifts.next_page_number }}">Завантажити ще</button>
+    </div>
+  {% endif %}
+{% endblock %}

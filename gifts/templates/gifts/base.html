@@ -1,0 +1,91 @@
+{% load static %}
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>{% block title %}GiftMate{% endblock %}</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'gifts/style.css' %}">
+  </head>
+  <body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-white bg-white shadow-sm">
+      <div class="container">
+        <a class="navbar-brand fw-bold" href="{% url 'gifts:home' %}">GiftMate</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav" aria-controls="nav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="nav">
+          <ul class="navbar-nav ms-auto">
+            {% if user.is_authenticated %}
+              <li class="nav-item"><a class="nav-link" href="{% url 'chat:inbox' %}">Повідомлення</a></li>
+              <li class="nav-item"><a class="nav-link" href="{% url 'gifts:profile' %}">Мій профіль</a></li>
+              <li class="nav-item">
+                <form method="post" action="{% url 'logout' %}">{% csrf_token %}
+                  <button class="btn nav-link" style="border:none;background:none;padding:0">Вийти</button>
+                </form>
+              </li>
+            {% else %}
+              <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Увійти</a></li>
+              <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Реєстрація</a></li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+  <main class="container py-4">
+      <div class="row">
+        <div class="col-lg-2 d-none d-lg-block">
+          <!-- left sidebar (optional) -->
+        </div>
+        <div class="col-lg-6">
+          {% if messages %}
+            <div class="mb-3">
+              {% for m in messages %}
+                <div class="alert alert-{{ m.tags }}">{{ m }}</div>
+              {% endfor %}
+            </div>
+          {% endif %}
+          {% block content %}{% endblock %}
+        </div>
+        <div class="col-lg-4 d-none d-lg-block">
+          <!-- right sidebar: profile / suggestions -->
+          {% if not hide_sidebar %}
+          <div class="card mb-3 p-3">
+            {% if user.is_authenticated %}
+              <div class="d-flex align-items-center">
+                {% if user.profile.avatar %}
+                  <img src="{{ user.profile.avatar.url }}" class="rounded-circle me-2" width="56" height="56">
+                {% else %}
+                  <div class="rounded-circle bg-secondary me-2" style="width:56px;height:56px"></div>
+                {% endif %}
+                <div>
+                  <div class="fw-bold">{{ user.profile.display_name|default:user.username }}</div>
+                  <div class="text-muted small">Ваш профіль</div>
+                </div>
+              </div>
+            {% else %}
+              <p><a href="{% url 'login' %}">Увійти</a> або <a href="{% url 'register' %}">зареєструватись</a></p>
+            {% endif %}
+              <hr />
+              <p class="mb-0"><a href="{% url 'chat:inbox' %}">Перейти до повідомлень</a></p>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </main>
+
+  <footer class="text-center text-muted py-4">© {% now "Y" %} GiftMate</footer>
+
+  <!-- Global toast container -->
+  <div id="global-toast" style="position:fixed;top:20px;right:20px;z-index:2000"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="" crossorigin="anonymous"></script>
+    <script src="{% static 'gifts/app.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'chat/style.css' %}">
+    <script src="{% static 'chat/chat.js' %}"></script>
+  </body>
+  </html>
