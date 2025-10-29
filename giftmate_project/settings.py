@@ -29,7 +29,7 @@ DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
 
 # Hosts allowed to serve the app. Update in production or export DJANGO_ALLOWED_HOSTS env var as comma separated
 # Allow common local development hosts by default. In production, set DJANGO_ALLOWED_HOSTS.
-ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1,0.0.0.0').split(',')
+ALLOWED_HOSTS = ['gift-8y4v.onrender.com', 'localhost', '127.0.0.1', '0.0.0.0']
 
 
 # Application definition
